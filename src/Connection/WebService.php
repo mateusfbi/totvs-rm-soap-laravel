@@ -8,13 +8,6 @@ use Dotenv\Dotenv;
 class WebService
 {
 
-    public function __construct()
-    {
-
-        $dotenv = Dotenv::createImmutable(__DIR__."/../../");
-        $dotenv->load();
-    }
-
    /**
      * @param string $path
      * @return SoapClient
@@ -24,9 +17,9 @@ class WebService
     {
         try {
 
-            $connection = new SoapClient($_ENV['WS_URL']. $path, [
-                    'login'                 => $_ENV['WS_USER'],
-                    'password'              => $_ENV['WS_PASS'],
+            $connection = new SoapClient(env('WS_URL'). $path, [
+                    'login'                 => env('WS_USER'),
+                    'password'              => env('WS_PASS'),
                     'authentication'        => SOAP_AUTHENTICATION_BASIC,
                     'soap_version'          => SOAP_1_1,
                     'trace'                 => 1,
@@ -43,7 +36,7 @@ class WebService
                 ]);
 
         } catch (\Exception $e) {
-            echo '<h2 style="color:red;"><br /><br /> Erro: Não foi possival conectar ao servidor do RM.' .' - '.getenv('WS_URL'). '<br /></h2>'. $e->getMessage() . PHP_EOL;
+            echo '<h2 style="color:red;"><br /><br /> Erro: Não foi possival conectar ao servidor do RM.' .' - '.env('WS_URL'). '<br /></h2>'. $e->getMessage() . PHP_EOL;
             exit;
         }
 
