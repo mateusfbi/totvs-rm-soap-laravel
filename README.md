@@ -24,9 +24,9 @@ Este projeto é uma implementação em PHP para integração com o serviço SOAP
 
 1. Adicione e configure as variáveis de ambiente no arquivo `.env`. 
 
-WS_URL="http://localhost:8051"
-WS_USER="usuario"
-WS_PASS="senha"
+- WS_URL="http://localhost:8051"
+- WS_USER="usuario"
+- WS_PASS="senha"
 
 ## Uso
 

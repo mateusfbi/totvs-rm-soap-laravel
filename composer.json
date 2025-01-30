@@ -1,6 +1,6 @@
 {
     "name": "mateusfbi/totvs-rm-soap-laravel",
-    "description": "Conexão SOAP para integração com TOTVS RM usando Laravel",
+    "description": "Biblioteca de Conexão SOAP para integração com TOTVS RM usando Laravel",
     "keywords": ["soap", "totvs", "rm","laravel","totvs-rm"],
     "license": "MIT",
     "type": "library",
