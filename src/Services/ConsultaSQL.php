@@ -72,7 +72,7 @@ class ConsultaSQL
      * @return array
      */
 
-    public function execute(): array
+    public function RealizarConsultaSQL(): array
     {
         try {
 

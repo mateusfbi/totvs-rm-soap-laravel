@@ -15,7 +15,14 @@
     },
     "autoload": {
         "psr-4": {
-            "TotvsRmSoap\\": "src/"
+            "mateusfbi\\TotvsRmSoap\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "mateusfbi\\TotvsRmSoap\\Providers\\TotvsRmSoapProvider"
+            ]
         }
     }
 }

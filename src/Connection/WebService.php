@@ -17,9 +17,9 @@ class WebService
     {
         try {
 
-            $connection = new SoapClient(env('WS_URL'). $path, [
-                    'login'                 => env('WS_USER'),
-                    'password'              => env('WS_PASS'),
+            $connection = new SoapClient(config('url'). $path, [
+                    'login'                 => config('user'),
+                    'password'              => config('pass'),
                     'authentication'        => SOAP_AUTHENTICATION_BASIC,
                     'soap_version'          => SOAP_1_1,
                     'trace'                 => 1,
