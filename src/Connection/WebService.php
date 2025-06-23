@@ -17,9 +17,9 @@ class WebService
     {
         try {
 
-            $connection = new SoapClient(config('url'). $path, [
-                    'login'                 => config('user'),
-                    'password'              => config('pass'),
+            $connection = new SoapClient(config('totvsrmsoap.url'). $path, [
+                    'login'                 => config('totvsrmsoap.user'),
+                    'password'              => config('totvsrmsoap.pass'),
                     'authentication'        => SOAP_AUTHENTICATION_BASIC,
                     'soap_version'          => SOAP_1_1,
                     'trace'                 => 1,

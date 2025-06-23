@@ -2,8 +2,8 @@
 
 namespace mateusfbi\TotvsRmSoap\Services;
 
-use TotvsRmSoap\Connection\WebService;
-use TotvsRmSoap\Utils\Serialize;
+use mateusfbi\TotvsRmSoap\Connection\WebService;
+use mateusfbi\TotvsRmSoap\Utils\Serialize;
 
 class ConsultaSQL
 {

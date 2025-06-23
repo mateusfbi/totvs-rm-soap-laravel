@@ -2,7 +2,7 @@
 
 namespace mateusfbi\TotvsRmSoap\Services;
 
-use TotvsRmSoap\Connection\WebService;
+use mateusfbi\TotvsRmSoap\Connection\WebService;
 
 class Process
 {
