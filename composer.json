@@ -21,7 +21,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "mateusfbi\\TotvsRmSoap\\Providers\\TotvsRmSoapProvider"
+                "mateusfbi\\TotvsRmSoap\\TotvsRmSoapProvider"
             ]
         }
     }
