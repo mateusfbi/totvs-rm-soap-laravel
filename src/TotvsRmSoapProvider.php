@@ -10,7 +10,7 @@ class TotvsRmSoapProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/totvsrmsoap.php' => config_path('totvsrmsoap.php')
+            __DIR__.'/config/totvsrmsoap.php' => config_path('totvsrmsoap.php')
         ],'config');
     }
 
