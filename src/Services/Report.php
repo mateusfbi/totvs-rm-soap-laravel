@@ -3,6 +3,7 @@
 namespace mateusfbi\TotvsRmSoap\Services;
 
 use mateusfbi\TotvsRmSoap\Connection\WebService;
+use mateusfbi\TotvsRmSoap\Traits\WebServiceCaller;
 use \DOMDocument;
 
 /**
@@ -23,6 +24,8 @@ use \DOMDocument;
 
 class Report
 {
+    use WebServiceCaller;
+
     private $webService;
     private int $coligada;
     private int $id;
@@ -145,7 +148,7 @@ class Report
     public function setFiltro(array $filtros = []): void
     {
 		// 1. Inicializa o objeto DOMDocument
-		$dom = new DOMDocument('1.0', 'utf-16');
+		$dom = new DOMDocument('1.0', 'UTF-8');
 		$dom->formatOutput = true; // Formata o XML para melhor legibilidade
 		$dom->preserveWhiteSpace = false;
 
@@ -354,26 +357,6 @@ class Report
     }
 
     /**
-     * Método auxiliar para chamar métodos do serviço web e tratar exceções.
-     *
-     * @param string $methodName Nome do método a ser chamado no serviço web.
-     * @param array $params Parâmetros a serem passados para o método.
-     * @param mixed $defaultValue Valor padrão a ser retornado em caso de erro.
-     * @return mixed O resultado da chamada do método ou o valor padrão em caso de exceção.
-     */
-    private function callWebServiceMethod(string $methodName, array $params = [], $defaultValue = null)
-    {
-        try {
-            $execute = $this->webService->$methodName($params);
-            $resultProperty = $methodName . 'Result';
-            return $execute->$resultProperty;
-        } catch (\Exception $e) {
-            error_log("Erro ao chamar o método SOAP '{$methodName}' na classe " . __CLASS__ . ": " . $e->getMessage());
-            return $defaultValue;
-        }
-    }
-
-    /**
      * Gera o relatório através do serviço SOAP.
      *
      * Envia a requisição com os parâmetros configurados (coligada, id, filtro, parâmetros, nome do arquivo e contexto)
@@ -386,10 +369,10 @@ class Report
         $params = [
             'codColigada' => $this->coligada,
             'id'          => $this->id,
-            'filters'     => empty($this->filtro) ? null : $this->filtro,
-            'parameters'  => empty($this->parametros) ? null : $this->parametros,
+            'filters'     => $this->filtro,
+            'parameters'  => $this->parametros,
             'fileName'    => $this->nomeArquivo,
-            'contexto'    => empty($this->contexto) ? null : $this->contexto,
+            'contexto'    => $this->contexto,
         ];
         return $this->callWebServiceMethod('GenerateReport', $params, '');
     }

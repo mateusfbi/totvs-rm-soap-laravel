@@ -3,6 +3,7 @@
 namespace mateusfbi\TotvsRmSoap\Services;
 
 use mateusfbi\TotvsRmSoap\Connection\WebService;
+use mateusfbi\TotvsRmSoap\Traits\WebServiceCaller;
 
 /**
  * Classe FormulaVisual
@@ -15,9 +16,11 @@ use mateusfbi\TotvsRmSoap\Connection\WebService;
  */
 class FormulaVisual
 {
+    use WebServiceCaller;
+
     private $webService;
     private string $idFormula;
-    private string $coligada;
+    private int $coligada;
     private string $contexto;
     private string $paramXML;
 
@@ -99,25 +102,5 @@ class FormulaVisual
             'ownerData' => null
         ];
         return (int) $this->callWebServiceMethod('Execute', $params, 0);
-    }
-
-    /**
-     * Método auxiliar para chamar métodos do serviço web e tratar exceções.
-     *
-     * @param string $methodName Nome do método a ser chamado no serviço web.
-     * @param array $params Parâmetros a serem passados para o método.
-     * @param mixed $defaultValue Valor padrão a ser retornado em caso de erro.
-     * @return mixed O resultado da chamada do método ou o valor padrão em caso de exceção.
-     */
-    private function callWebServiceMethod(string $methodName, array $params = [], $defaultValue = null)
-    {
-        try {
-            $execute = $this->webService->$methodName($params);
-            $resultProperty = $methodName . 'Result';
-            return $execute->$resultProperty;
-        } catch (\Exception $e) {
-            error_log("Erro ao chamar o método SOAP '{$methodName}' na classe " . __CLASS__ . ": " . $e->getMessage());
-            return $defaultValue;
-        }
     }
 }
