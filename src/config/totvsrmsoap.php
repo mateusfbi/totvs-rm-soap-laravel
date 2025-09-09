@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'url' => env('WS_URL'),
-    'user' => env('WS_USER'),
-    'pass' => env('WS_PASS')
+    'url' => env('TOTVSRM_WSURL'),
+    'user' => env('TOTVSRM_USER'),
+    'pass' => env('TOTVSRM_PASS')
 ];
