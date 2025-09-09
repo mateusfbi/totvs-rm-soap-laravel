@@ -11,7 +11,7 @@ Este projeto é uma implementação em PHP para integração com o serviço SOAP
 
 ## Instalação
 Instale as dependências via Composer:
-```composer install totvs-rm-soap-laravel```
+```composer install mateusfbi/totvs-rm-soap-laravel```
 
 publicar o arquivo de configuração no diretório config
 ```php artisan vendor:publish --tag=config```
@@ -19,9 +19,9 @@ publicar o arquivo de configuração no diretório config
 ## Configuração
 
 1. Adicione e configure as variáveis de ambiente no arquivo `.env`.
-- WS_URL=http://localhost:8051
-- WS_USER=usuario
-- WS_PASS=senha
+- TOTVSRM_WSURL=http://localhost:8051
+- TOTVSRM_USER=usuario
+- TOTVSRM_PASS=senha
 
 ## Uso
 
