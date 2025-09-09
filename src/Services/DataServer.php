@@ -15,8 +15,52 @@ use mateusfbi\TotvsRmSoap\Traits\WebServiceCaller;
  *
  * @package TotvsRmSoap\Services
  */
+use Illuminate\Support\Collection;
+use TotvsRmSoap\DataTransferObjects\ReadViewParams;
+use TotvsRmSoap\DataTransferObjects\Record;
+use TotvsRmSoap\Exceptions\ConnectionException;
+use TotvsRmSoap\Exceptions\RecordNotFoundException;
+
 class DataServer
 {
+    // ... (seu construtor e outras propriedades)
+
+    /**
+     * Lê uma visão de dados do TOTVS RM.
+     *
+     * @param ReadViewParams $params Parâmetros da consulta.
+     * @return Collection<int, Record> Uma coleção de registros.
+     *
+     * @throws ConnectionException Se houver falha na comunicação com o WebService.
+     * @throws RecordNotFoundException Se a consulta não retornar resultados.
+     */
+    public function readView(ReadViewParams $params): Collection
+    {
+        // Lógica interna para chamar o WebService... 
+        // $xmlResult = $this->webServiceCaller->call('ReadView', [...]);
+
+        // SIMULAÇÃO DA LÓGICA DE RETORNO:
+        $simulatedXmlResult = '<Resultado><GUSUARIO><CODUSUARIO>mestre</CODUSUARIO><NOME>Mestre</NOME></GUSUARIO></Resultado>';
+
+        if (empty($simulatedXmlResult)) {
+            throw new ConnectionException('Falha ao conectar ao serviço DataServer.');
+        }
+
+        // Lógica para converter o XML em array
+        $data = $this->serializer->fromXml($simulatedXmlResult);
+
+        if (empty($data)) {
+            throw new RecordNotFoundException(
+                sprintf('Nenhum registro encontrado no DataServer %s com o filtro %s.', $params->dataServerName, $params->filter)
+            );
+        }
+
+        // Transforma os dados brutos em uma coleção de DTOs
+        return collect($data)->map(fn($item) => new Record($item));
+    }
+
+    // ... (outros métodos: saveRecord, etc.)
+}
     use WebServiceCaller;
 
     private $webService;

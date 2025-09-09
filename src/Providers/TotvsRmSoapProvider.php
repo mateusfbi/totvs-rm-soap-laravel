@@ -1,14 +1,15 @@
 <?php
 
-namespace mateusfbi\TotvsRmSoap\Providers;
+namespace TotvsRmSoap\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use mateusfbi\TotvsRmSoap\Connection\WebService;
-use mateusfbi\TotvsRmSoap\Services\ConsultaSQL;
-use mateusfbi\TotvsRmSoap\Services\DataServer;
-use mateusfbi\TotvsRmSoap\Services\FormulaVisual;
-use mateusfbi\TotvsRmSoap\Services\Process;
-use mateusfbi\TotvsRmSoap\Services\Report;
+use TotvsRmSoap\Connection\WebService;
+use TotvsRmSoap\Services\ConsultaSQL;
+use TotvsRmSoap\Services\DataServer;
+use TotvsRmSoap\Services\FormulaVisual;
+use TotvsRmSoap\Services\Process;
+use TotvsRmSoap\Services\Report;
+use TotvsRmSoap\TotvsRM;
 
 class TotvsRmSoapProvider extends ServiceProvider
 {
@@ -18,36 +19,31 @@ class TotvsRmSoapProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/totvsrmsoap.php' => config_path('totvsrmsoap.php')
         ],'config');
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/totvsrmsoap.php', 'totvsrmsoap'
-        );
     }
 
     public function register()
     {
-        $this->app->singleton(WebService::class, function ($app) {
-            return new WebService();
-        });
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/totvsrmsoap.php', 'totvsrmsoap'
+        );
 
-        $this->app->bind('totvs.consulta_sql', function ($app) {
-            return new ConsultaSQL($app->make(WebService::class));
-        });
+        // Registra cada serviço individualmente (mantendo a compatibilidade)
+        $this->app->singleton(WebService::class, fn() => new WebService());
+        $this->app->singleton(DataServer::class, fn($app) => new DataServer($app->make(WebService::class)));
+        $this->app->singleton(ConsultaSQL::class, fn($app) => new ConsultaSQL($app->make(WebService::class)));
+        $this->app->singleton(Report::class, fn($app) => new Report($app->make(WebService::class)));
+        $this->app->singleton(Process::class, fn($app) => new Process($app->make(WebService::class)));
+        $this->app->singleton(FormulaVisual::class, fn($app) => new FormulaVisual($app->make(WebService::class)));
 
-        $this->app->bind('totvs.data_server', function ($app) {
-            return new DataServer($app->make(WebService::class));
-        });
-
-        $this->app->bind('totvs.formula_visual', function ($app) {
-            return new FormulaVisual($app->make(WebService::class));
-        });
-
-        $this->app->bind('totvs.process', function ($app) {
-            return new Process($app->make(WebService::class));
-        });
-
-        $this->app->bind('totvs.report', function ($app) {
-            return new Report($app->make(WebService::class));
+        // Registra a classe principal que a Facade irá usar
+        $this->app->singleton('totvs-rm', function ($app) {
+            return new TotvsRM(
+                $app->make(DataServer::class),
+                $app->make(ConsultaSQL::class),
+                $app->make(Report::class),
+                $app->make(Process::class),
+                $app->make(FormulaVisual::class)
+            );
         });
     }
 }
