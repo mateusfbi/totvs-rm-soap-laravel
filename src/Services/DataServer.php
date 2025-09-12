@@ -13,13 +13,13 @@ use mateusfbi\TotvsRmSoap\Traits\WebServiceCaller;
  * realizar operações de persistência, leitura e exclusão de registros, além de montar
  * o XML necessário para algumas requisições.
  *
- * @package TotvsRmSoap\Services
+ * @package mateusfbi\TotvsRmSoap\Services
  */
 use Illuminate\Support\Collection;
-use TotvsRmSoap\DataTransferObjects\ReadViewParams;
-use TotvsRmSoap\DataTransferObjects\Record;
-use TotvsRmSoap\Exceptions\ConnectionException;
-use TotvsRmSoap\Exceptions\RecordNotFoundException;
+use mateusfbi\TotvsRmSoap\DataTransferObjects\ReadViewParams;
+use mateusfbi\TotvsRmSoap\DataTransferObjects\Record;
+use mateusfbi\TotvsRmSoap\Exceptions\ConnectionException;
+use mateusfbi\TotvsRmSoap\Exceptions\RecordNotFoundException;
 
 class DataServer
 {
