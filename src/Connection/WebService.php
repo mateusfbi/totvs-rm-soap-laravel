@@ -39,8 +39,8 @@ class WebService
         $options = [
             'login'                 => config('totvsrmsoap.user'),
             'password'              => config('totvsrmsoap.pass'),
-            'authentication'        => SOAP_AUTHENTICATION_BASIC,
-            'soap_version'          => SOAP_1_1,
+                        'authentication'        => 1,
+            'soap_version'          => 1,
             'trace'                 => 1,
             'exceptions'            => 1, // Corrigido de 'excepitions' para 'exceptions' e definido como true
             "stream_context" => stream_context_create(
