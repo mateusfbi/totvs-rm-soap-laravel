@@ -2,6 +2,7 @@
 
 namespace mateusfbi\TotvsRmSoap\Connection;
 
+use mateusfbi\TotvsRmSoap\Exceptions\ConnectionException;
 use \SoapClient;
 
 /**
@@ -30,17 +31,16 @@ class WebService
      * @return SoapClient
      */
 
-    public function getClient(string $path) : SoapClient
+    public function getClient(string $path, ?string $companyCode = null) : SoapClient
     {
-
-
-        $url = config('totvsrmsoap.url'). $path;
+        $baseUrl = $this->resolveBaseUrl($companyCode);
+        $url = rtrim($baseUrl, '/'). $path;
 
         $options = [
             'login'                 => config('totvsrmsoap.user'),
             'password'              => config('totvsrmsoap.pass'),
-            'authentication'        => SOAP_AUTHENTICATION_BASIC,
-            'soap_version'          => SOAP_1_1,
+            'authentication'        => 1,
+            'soap_version'          => 1,
             'trace'                 => 1,
             'exceptions'            => 1, // Corrigido de 'excepitions' para 'exceptions' e definido como true
             "stream_context" => stream_context_create(
@@ -59,6 +59,42 @@ class WebService
     }
 
     /**
+     * Resolve a URL base considerando mapeamento por empresa.
+     * Aceita em config:
+     * - 'url' => string padrão
+     * - 'companies' => array [codigo => url] ou string "cod|url;cod2|url2"
+     */
+    private function resolveBaseUrl(?string $companyCode): string
+    {
+        $defaultUrl = (string) config('totvsrmsoap.url');
+        $companies = config('totvsrmsoap.companies');
+
+        if (empty($companyCode) || empty($companies)) {
+            return $defaultUrl;
+        }
+
+        // Se já for array, usa direto
+        if (is_array($companies)) {
+            return (string) ($companies[$companyCode] ?? $defaultUrl);
+        }
+
+        // Se vier como string, parseia formato: "cod|url;cod2|url2"
+        if (is_string($companies)) {
+            $map = [];
+            $pairs = array_filter(array_map('trim', explode(';', $companies)));
+            foreach ($pairs as $pair) {
+                [$code, $url] = array_map('trim', explode('|', $pair)) + [null, null];
+                if (!empty($code) && !empty($url)) {
+                    $map[$code] = $url;
+                }
+            }
+            return (string) ($map[$companyCode] ?? $defaultUrl);
+        }
+
+        return $defaultUrl;
+    }
+
+    /**
      * Método auxiliar para criar uma instância do SoapClient e tratar exceções.
      *
      * @param string $url URL completa do serviço SOAP.
@@ -71,9 +107,7 @@ class WebService
         try {
             return new \SoapClient($url, $options);
         } catch (\Exception $e) {
-            $errorMessage = 'Erro: Não foi possível conectar ao servidor do RM. URL: ' . $url . ' - ' . $e->getMessage();
-            error_log($errorMessage);
-            throw new \RuntimeException($errorMessage, 0, $e);
+            throw ConnectionException::forUrl($url, $e->getMessage());
         }
     }
 

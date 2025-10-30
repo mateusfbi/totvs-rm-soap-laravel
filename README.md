@@ -23,6 +23,22 @@ publicar o arquivo de configuração no diretório config
 - TOTVSRM_USER=usuario
 - TOTVSRM_PASS=senha
 
+2. Configurar URL por empresa (coligada) no arquivo `config/totvsrmsoap.php` (recomendado):
+
+```php
+// config/totvsrmsoap.php
+'companies' => [
+    '01' => 'http://rm-empresa01:8051',
+    '02' => 'http://rm-empresa02:8051',
+],
+```
+
+Opcionalmente, é possível usar `.env` com a variável `TOTVSRM_COMPANIES` no formato:
+
+```
+TOTVSRM_COMPANIES="01|http://rm-empresa01:8051;02|http://rm-empresa02:8051"
+```
+
 ## Uso
 
 Para utilizar os serviços, você pode injetar as classes de serviço diretamente em seus controllers ou outros serviços, ou usar o helper `app()` do Laravel. O provedor de serviços se encarregará de instanciar as classes com suas dependências.
@@ -71,6 +87,29 @@ $ds->setFiltro("1=1");
 $result = $ds->readView();
 
 // ...
+```
+
+### Uso com URL por empresa
+
+Todos os serviços expõem `forCompany($codigo)` para selecionar a URL base a partir do mapeamento configurado. Ex.:
+
+```php
+use mateusfbi\TotvsRmSoap\Facades\TotvsRM;
+
+// Via Facade
+$ds = TotvsRM::dataServer()->forCompany('01');
+$ds->setDataServer('GlbColigadaDataBR');
+$ds->setContexto('CODSISTEMA=G;CODCOLIGADA=1;CODUSUARIO=mestre');
+$ds->setFiltro('1=1');
+$result = $ds->readView();
+
+// Via helper app()
+$sql = app('totvs.consulta_sql')->forCompany('02');
+$sql->setSentenca('SENTENCA_EXEMPLO');
+$sql->setColigada(2);
+$sql->setSistema('G');
+$sql->setParametros(['P1' => 'VALOR']);
+$res = $sql->RealizarConsultaSQL();
 ```
 
 ## Licença

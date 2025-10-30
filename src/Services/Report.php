@@ -27,6 +27,7 @@ class Report
     use WebServiceCaller;
 
     private $webService;
+    private string $endpointPath = '/wsReport/MEX?wsdl';
     private int $coligada;
     private int $id;
     private string $filtro;
@@ -46,7 +47,16 @@ class Report
      */
     public function __construct(WebService $webService)
     {
-        $this->webService = $webService->getClient('/wsReport/MEX?wsdl');
+        $this->webService = $webService->getClient($this->endpointPath);
+    }
+
+    /**
+     * Seleciona a empresa (coligada) para definir a URL base do serviço.
+     */
+    public function forCompany(string $companyCode): self
+    {
+        $this->webService = (new WebService())->getClient($this->endpointPath, $companyCode);
+        return $this;
     }
 
     /**
