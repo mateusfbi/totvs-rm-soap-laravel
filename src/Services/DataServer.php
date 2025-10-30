@@ -93,27 +93,14 @@ class DataServer
     }
 
     /**
-     * Monta o XML da requisição do DataServer.
+     * Define diretamente o XML da requisição do DataServer.
      *
-     * Cria um documento XML com o nome da tabela informado e adiciona elementos para cada campo
-     * contido no array $data.
-     *
-     * @param string $table Nome da tabela ou elemento raíz do XML.
-     * @param array $data Array associativo contendo os dados (campo => valor).
-     * @return void
+     * @param string $xml Conteúdo XML completo.
+     * @return string XML definido.
      */
-    public function setXML(string $table, array $data): void
+    public function setXML(string $xml): string
     {
-        $dom = new \DOMDocument('1.0', 'utf-8');
-        $element = $dom->createElement($table);
-        $dom->appendChild($element);
-
-        foreach ($data as $key => $value) :
-            $append = $dom->createElement($key, $value);
-            $element->appendChild($append);
-        endforeach;
-
-        $this->xml = $dom->saveXML();
+        return $this->xml = $xml;
     }
 
     /**
