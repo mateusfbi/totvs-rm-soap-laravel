@@ -21,6 +21,7 @@ class ConsultaSQL
     use WebServiceCaller;
 
     private $webService;
+    private string $endpointPath = '/wsConsultaSQL/MEX?wsdl';
     private string $sentenca;
     private int $coligada;
     private string $sistema;
@@ -37,7 +38,16 @@ class ConsultaSQL
 
     public function __construct(WebService $webService)
     {
-        $this->webService = $webService->getClient('/wsConsultaSQL/MEX?wsdl');
+        $this->webService = $webService->getClient($this->endpointPath);
+    }
+
+    /**
+     * Seleciona a empresa (coligada) para definir a URL base do serviço.
+     */
+    public function forCompany(string $companyCode): self
+    {
+        $this->webService = (new WebService())->getClient($this->endpointPath, $companyCode);
+        return $this;
     }
 
     /**

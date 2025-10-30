@@ -19,6 +19,7 @@ class FormulaVisual
     use WebServiceCaller;
 
     private $webService;
+    private string $endpointPath = '/wsFormulaVisual/MEX?wsdl';
     private string $idFormula;
     private int $coligada;
     private string $contexto;
@@ -34,7 +35,16 @@ class FormulaVisual
      */
     public function __construct(WebService $webService)
     {
-        $this->webService = $webService->getClient('/wsFormulaVisual/MEX?wsdl');
+        $this->webService = $webService->getClient($this->endpointPath);
+    }
+
+    /**
+     * Seleciona a empresa (coligada) para definir a URL base do serviço.
+     */
+    public function forCompany(string $companyCode): self
+    {
+        $this->webService = (new WebService())->getClient($this->endpointPath, $companyCode);
+        return $this;
     }
 
     /**

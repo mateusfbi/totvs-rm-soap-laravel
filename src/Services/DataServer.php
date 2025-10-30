@@ -20,6 +20,7 @@ class DataServer
     use WebServiceCaller;
 
     private $webService;
+    private string $endpointPath = '/wsDataServer/MEX?wsdl';
     private string $dataServer;
     private string $primaryKey;
     private string $contexto;
@@ -35,7 +36,16 @@ class DataServer
      */
     public function __construct(WebService $webService)
     {
-        $this->webService = $webService->getClient('/wsDataServer/MEX?wsdl');
+        $this->webService = $webService->getClient($this->endpointPath);
+    }
+
+    /**
+     * Seleciona a empresa (coligada) para definir a URL base do serviço.
+     */
+    public function forCompany(string $companyCode): self
+    {
+        $this->webService = (new WebService())->getClient($this->endpointPath, $companyCode);
+        return $this;
     }
 
     /**
