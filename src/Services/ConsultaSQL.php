@@ -53,7 +53,7 @@ class ConsultaSQL
     /**
      * Define a sentença SQL para a consulta.
      *
-     * @param string $sentenca Sentença SQL a ser utilizada.
+     * @param string $sentenca Código da Sentença SQL a ser utilizada.
      * @return void
      */
     public function setSentenca(string $sentenca): void
