@@ -35,6 +35,8 @@ class WebService
     {
         $baseUrl = $this->resolveBaseUrl($companyCode);
         $url = rtrim($baseUrl, '/'). $path;
+        
+        $timeout = config('totvsrmsoap.default_socket_timeout', 1800);
 
         $options = [
             'login'                 => config('totvsrmsoap.user'),
@@ -49,6 +51,9 @@ class WebService
                         'verify_peer'       => false,
                         'verify_peer_name'  => false,
                         'allow_self_signed' => true
+                    ],
+                    'http' => [
+                        'timeout' => $timeout,
                     ]
                 ]
             )

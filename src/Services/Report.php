@@ -444,15 +444,15 @@ class Report
     /**
      * Obtém o status do relatório gerado.
      *
-     * Envia uma requisição SOAP usando o identificador do relatório (id) para recuperar
-     * o status do relatório gerado.
+     * Envia uma requisição SOAP usando o guid para recuperar
+     * o status do relatório gerado pelo generateReportAsynchronous.
      *
      * @return string Status do relatório.
      */
     public function getGeneratedReportStatus(): string
     {
         $params = [
-            'id'      => $this->id
+            'id'      => $this->guid
         ];
         return $this->callWebServiceMethod('GetGeneratedReportStatus', $params, '');
     }
