@@ -35,8 +35,19 @@ publicar o arquivo de configuração no diretório config
 
 Opcionalmente, é possível usar `.env` com a variável `TOTVSRM_COMPANIES` no formato:
 
-```
 TOTVSRM_COMPANIES="01|http://rm-empresa01:8051;02|http://rm-empresa02:8051"
+```
+
+3. Configure o timeout da conexão (opcional):
+
+No `.env`:
+```
+TOTVSRM_CONNECTION_TIMEOUT=1800 # tempo em segundos
+```
+
+Ou no arquivo `config/totvsrmsoap.php`:
+```php
+'connection_timeout' => env('TOTVSRM_CONNECTION_TIMEOUT', 1800),
 ```
 
 ## Uso
