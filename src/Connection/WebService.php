@@ -36,7 +36,7 @@ class WebService
         $baseUrl = $this->resolveBaseUrl($companyCode);
         $url = rtrim($baseUrl, '/'). $path;
         
-        $timeout = config('totvsrmsoap.default_socket_timeout', 1800);
+        $timeout = config('totvsrmsoap.connection_timeout', 1800);
 
         $options = [
             'login'                 => config('totvsrmsoap.user'),
@@ -45,6 +45,7 @@ class WebService
             'soap_version'          => 1,
             'trace'                 => 1,
             'exceptions'            => 1, // Corrigido de 'excepitions' para 'exceptions' e definido como true
+            'connection_timeout'    => $timeout,
             "stream_context" => stream_context_create(
                 [
                     'ssl' => [

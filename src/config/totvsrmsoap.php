@@ -11,5 +11,6 @@ return [
     'companies' => [
         // '01' => 'http://rm-empresa01:8051',
         // '02' => 'http://rm-empresa02:8051',
-    ]
+    ],
+    'connection_timeout' => env('TOTVSRM_CONNECTION_TIMEOUT', 1800), // 30 minutos padrão
 ];
