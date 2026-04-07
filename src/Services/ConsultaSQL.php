@@ -37,7 +37,7 @@ class ConsultaSQL
      */
 
     public function __construct(WebService $webService)
-    {
+    {   
         $this->webService = $webService->getClient($this->endpointPath);
     }
 
