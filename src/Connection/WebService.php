@@ -41,25 +41,24 @@ class WebService
         $options = [
             'login'                 => config('totvsrmsoap.user'),
             'password'              => config('totvsrmsoap.pass'),
-            'authentication'        => 1,
-            'soap_version'          => 1,
-            'trace'                 => 1,
-            'exceptions'            => 1, // Corrigido de 'excepitions' para 'exceptions' e definido como true
+            'authentication'        => SOAP_AUTHENTICATION_BASIC,
+            'soap_version'          => SOAP_1_1,
+            'trace'                 => true,
+            'exceptions'            => true,
             'connection_timeout'    => $timeout,
-            "stream_context" => stream_context_create(
+            'stream_context'        => stream_context_create(
                 [
                     'ssl' => [
-                        'verify_peer'       => false,
-                        'verify_peer_name'  => false,
-                        'allow_self_signed' => true
-                    ],
-                    'http' => [
-                        'timeout' => $timeout,
+                        // ATENÇÃO: Em produção, é ALTAMENTE recomendado definir estas opções como true
+                        // e configurar corretamente os certificados CA para garantir a segurança SSL.
+                        // Para desenvolvimento, podem ser definidos como false no .env.
+                        'verify_peer'       => filter_var($_ENV['WS_SSL_VERIFY_PEER'] ?? true, FILTER_VALIDATE_BOOLEAN),
+                        'verify_peer_name'  => filter_var($_ENV['WS_SSL_VERIFY_PEER_NAME'] ?? true, FILTER_VALIDATE_BOOLEAN),
+                        'allow_self_signed' => filter_var($_ENV['WS_SSL_ALLOW_SELF_SIGNED'] ?? false, FILTER_VALIDATE_BOOLEAN)
                     ]
                 ]
             )
         ];
-
 
         return $this->createSoapClient($url, $options);
     }
